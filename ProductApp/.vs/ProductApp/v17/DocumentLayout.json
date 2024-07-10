@@ -1,0 +1,53 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "Z:\\Shared\\Project\\ProductApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A3278AC4-08DD-4150-B0A2-BF496584998F}|ProductWebApp\\ProductWebApp.csproj|z:\\shared\\project\\productapp\\productwebapp\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A3278AC4-08DD-4150-B0A2-BF496584998F}|ProductWebApp\\ProductWebApp.csproj|solutionrelative:productwebapp\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A3278AC4-08DD-4150-B0A2-BF496584998F}|ProductWebApp\\ProductWebApp.csproj|z:\\shared\\project\\productapp\\productwebapp\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3278AC4-08DD-4150-B0A2-BF496584998F}|ProductWebApp\\ProductWebApp.csproj|solutionrelative:productwebapp\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "Z:\\Shared\\Project\\ProductApp\\ProductWebApp\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "ProductWebApp\\Views\\Home\\Index.cshtml",
+              "ToolTip": "Z:\\Shared\\Project\\ProductApp\\ProductWebApp\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "ProductWebApp\\Views\\Home\\Index.cshtml",
+              "ViewState": "AQIAACoAAAAAAAAAAAAAAA0AAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-07-10T00:57:46.871Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Product.cs",
+              "DocumentMoniker": "Z:\\Shared\\Project\\ProductApp\\ProductWebApp\\Models\\Product.cs",
+              "RelativeDocumentMoniker": "ProductWebApp\\Models\\Product.cs",
+              "ToolTip": "Z:\\Shared\\Project\\ProductApp\\ProductWebApp\\Models\\Product.cs",
+              "RelativeToolTip": "ProductWebApp\\Models\\Product.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-09T23:19:28.658Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

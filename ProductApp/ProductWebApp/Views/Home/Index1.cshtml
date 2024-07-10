@@ -1,0 +1,172 @@
+﻿@page
+@model ProductWebApp.Models.Product
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Product List</h1>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="productTableBody">
+            <!-- AJAX will populate this -->
+        </tbody>
+    </table>
+
+    <button id="addProductButton">Add Product</button>
+    <div id="productForm" style="display:none;">
+        <h2>Product Form</h2>
+        <input type="hidden" id="productId">
+        <div>
+            <label>Name:</label>
+            <input type="text" id="productName">
+        </div>
+        <div>
+            <label>Price:</label>
+            <input type="number" id="productPrice" step="0.01">
+        </div>
+        <div>
+            <label>Description:</label>
+            <input type="text" id="productDescription">
+        </div>
+        <button id="saveProductButton">Save</button>
+        <button id="cancelProductButton">Cancel</button>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Function to load products
+        function loadProducts() {
+            $.ajax({
+                url: 'https://localhost:5001/api/products', // URL of the ProductService
+                method: 'GET',
+                success: function (data) {
+                    var productTableBody = $('#productTableBody');
+                    productTableBody.empty();
+                    data.forEach(function (product) {
+                        productTableBody.append(
+                            '<tr>' +
+                            '<td>' + product.id + '</td>' +
+                            '<td>' + product.name + '</td>' +
+                            '<td>' + product.price + '</td>' +
+                            '<td>' + product.description + '</td>' +
+                            '<td>' +
+                            '<button class="editProductButton" data-id="' + product.id + '">Edit</button>' +
+                            '<button class="deleteProductButton" data-id="' + product.id + '">Delete</button>' +
+                            '</td>' +
+                            '</tr>'
+                        );
+                    });
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+
+        loadProducts();
+
+        // Show product form
+        $('#addProductButton').click(function () {
+            $('#productId').val('');
+            $('#productName').val('');
+            $('#productPrice').val('');
+            $('#productDescription').val('');
+            $('#productForm').show();
+        });
+
+        // Hide product form
+        $('#cancelProductButton').click(function () {
+            $('#productForm').hide();
+        });
+
+        // Save product (insert/update)
+        $('#saveProductButton').click(function () {
+            var productId = $('#productId').val();
+            var product = {
+                name: $('#productName').val(),
+                price: parseFloat($('#productPrice').val()),
+                description: $('#productDescription').val()
+            };
+
+            if (productId) {
+                // Update product
+                $.ajax({
+                    url: 'https://localhost:5001/api/products/' + productId,
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(product),
+                    success: function () {
+                        loadProducts();
+                        $('#productForm').hide();
+                    },
+                    error: function (error) {
+                        console.log('Error:', error);
+                    }
+                });
+            } else {
+                // Insert product
+                $.ajax({
+                    url: 'https://localhost:5001/api/products',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(product),
+                    success: function () {
+                        loadProducts();
+                        $('#productForm').hide();
+                    },
+                    error: function (error) {
+                        console.log('Error:', error);
+                    }
+                });
+            }
+        });
+
+        // Edit product
+        $(document).on('click', '.editProductButton', function () {
+            var productId = $(this).data('id');
+
+            $.ajax({
+                url: 'https://localhost:5001/api/products/' + productId,
+                method: 'GET',
+                success: function (product) {
+                    $('#productId').val(product.id);
+                    $('#productName').val(product.name);
+                    $('#productPrice').val(product.price);
+                    $('#productDescription').val(product.description);
+                    $('#productForm').show();
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+
+        // Delete product
+        $(document).on('click', '.deleteProductButton', function () {
+            var productId = $(this).data('id');
+
+            $.ajax({
+                url: 'https://localhost:5001/api/products/' + productId,
+                method: 'DELETE',
+                success: function () {
+                    loadProducts();
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+    });
+</script>

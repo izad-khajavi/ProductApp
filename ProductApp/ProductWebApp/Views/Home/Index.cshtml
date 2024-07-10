@@ -1,0 +1,163 @@
+﻿@page
+@model ProductWebApp.Models.Book
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Book List</h1>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Author</th>
+               
+            </tr>
+        </thead>
+        <tbody id="bookTableBody">
+            <!-- AJAX will populate this -->
+        </tbody>
+    </table>
+
+    <button id="addBookButton">Add Book</button>
+    <div id="bookForm" style="display:none;">
+        <h2>Book Form</h2>
+        <input type="hidden" id="bookId">
+        <div>
+            <label>Name:</label>
+            <input type="text" id="bookName">
+        </div>
+        <div>
+            <label>Author:</label>
+            <input type="number" id="bookAuthor" step="0.01">
+        </div>
+        <button id="saveBookButton">Save</button>
+        <button id="cancelBookButton">Cancel</button>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Function to load Books
+        function loadBooks() {
+            $.ajax({
+                url: 'https://localhost:5001/api/books', // URL of the BookService
+                method: 'GET',
+                success: function (data) {
+                    var bookTableBody = $('#bookTableBody');
+                    bookTableBody.empty();
+                    data.forEach(function (book) {
+                        bookTableBody.append(
+                            '<tr>' +
+                            '<td>' + book.id + '</td>' +
+                            '<td>' + book.name + '</td>' +
+                            '<td>' + book.author + '</td>' +
+                            '<td>' +
+                            '<button class="editBookButton" data-id="' + book.id + '">Edit</button>' +
+                            '<button class="deleteBookButton" data-id="' + book.id + '">Delete</button>' +
+                            '</td>' +
+                            '</tr>'
+                        );
+                    });
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+
+        loadBooks();
+
+        // Show book form
+        $('#addBookButton').click(function () {
+            $('#bookId').val('');
+            $('#bookName').val('');
+            $('#bookAuthor').val('');
+            $('#bookForm').show();
+        });
+
+        // Hide book form
+        $('#cancelBookButton').click(function () {
+            $('#bookForm').hide();
+        });
+
+        // Save book (insert/update)
+        $('#saveBookButton').click(function () {
+            var bookId = $('#bookId').val();
+            var book = {
+                name: $('#bookName').val(),
+                author: parseFloat($('#bookAuthor').val())
+            };
+
+            if (bookId) {
+                // Update book
+                $.ajax({
+                    url: 'https://localhost:5001/api/books/' + bookId,
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(book),
+                    success: function () {
+                        loadBooks();
+                        $('#bookForm').hide();
+                    },
+                    error: function (error) {
+                        console.log('Error:', error);
+                    }
+                });
+            } else {
+                // Insert book
+                $.ajax({
+                    url: 'https://localhost:5001/api/books',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(book),
+                    success: function () {
+                        loadBooks();
+                        $('#bookForm').hide();
+                    },
+                    error: function (error) {
+                        console.log('Error:', error);
+                    }
+                });
+            }
+        });
+
+        // Edit book
+        $(document).on('click', '.editBookButton', function () {
+            var bookId = $(this).data('id');
+
+            $.ajax({
+                url: 'https://localhost:5001/api/books/' + bookId,
+                method: 'GET',
+                success: function (book) {
+                    $('#bookId').val(book.id);
+                    $('#bookName').val(book.name);
+                    $('#bookAuthor').val(book.author);
+                    $('#bookForm').show();
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+
+        // Delete book
+        $(document).on('click', '.deleteBookButton', function () {
+            var bookId = $(this).data('id');
+
+            $.ajax({
+                url: 'https://localhost:5001/api/books/' + bookId,
+                method: 'DELETE',
+                success: function () {
+                    loadBooks();
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+    });
+</script>
